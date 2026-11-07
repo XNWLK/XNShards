@@ -1,0 +1,9 @@
+## Interface: 16001
+## Title: XNShards
+## Notes: Destroys extra Soul Shards so you keep only the number you want (2 by default). /shards
+## Author: Xn
+## Version: 1.1
+## X-Website: https://github.com/XNWLK/XNShards
+## SavedVariables: XNShardsDB
+
+XNShards.lua
