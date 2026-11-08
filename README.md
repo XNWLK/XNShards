@@ -3,14 +3,18 @@
 **Soul Shard cleanup** for World of Warcraft: Forever. XNShards keeps the number of Soul Shards you want (2 by
 default) and destroys the rest, so Drain Soul never fills your bags again.
 
-**Download it from the [Releases page](https://github.com/XNWLK/XNShards/releases).**
+**Download it on [CurseForge](https://www.curseforge.com/wow/addons/xnshards)** (or from the
+[Releases page](https://github.com/XNWLK/XNShards/releases) here).
 
 > Built for the WoW: Forever client (interface 16001). What changed in each version: [changelog](CHANGELOG.md).
 
 ## Install
 
-1. Download `XNShards-x.y.zip` from the newest entry on the [Releases page](https://github.com/XNWLK/XNShards/releases).
+1. Install it from [CurseForge](https://www.curseforge.com/wow/addons/xnshards) (with the CurseForge app, or download
+   the file there), or download `XNShards-x.y.zip` from the newest entry on the
+   [Releases page](https://github.com/XNWLK/XNShards/releases).
 2. Unzip it into `World of Warcraft\_forever_\Interface\AddOns`, so that there is a folder `AddOns\XNShards`.
+   (The CurseForge app does this step for you.)
 3. Restart the game and tick **XNShards** in the AddOns list.
 
 ## How it works
