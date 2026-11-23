@@ -27,9 +27,8 @@ WoW: Forever only lets addons destroy items right after you press a key, so XNSh
 
 ## Safe by design
 
-- **Only Soul Shards:** XNShards picks the shard up, checks that the item on the cursor really is a Soul Shard, and
-  only then destroys it. Anything else goes straight back.
-- **Never your cursor:** if you're holding an item, XNShards leaves it alone.
+- **Only Soul Shards:** XNShards checks that the bag slot really holds a Soul Shard before destroying it.
+- **Never your cursor:** shards are destroyed straight from the bag, so XNShards never picks anything up.
 - **Never in combat.**
 - **Soul bag first:** the shards you keep are the ones in your soul bag.
 

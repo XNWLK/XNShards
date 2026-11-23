@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2
+
+- Fixed: with an action bar addon that takes over the bag and action bars, bags and bars
+  could stop responding to clicks after XNShards destroyed a shard. Shards are now destroyed straight from their bag
+  slot, without picking them up on the cursor.
+- The key press watcher only listens while you have extra shards.
+
 ## v1.1
 
 - Destroys the extra shards on your **next key press** out of combat (moving counts): WoW: Forever only lets addons
