@@ -21,9 +21,10 @@ default) and destroys the rest, so Drain Soul never fills your bags again.
 
 WoW: Forever only lets addons destroy items right after you press a key, so XNShards does it then:
 
-- **Automatic:** when you have more shards than you want, the **next key you press** out of combat destroys the
-  extras. Moving with WASD counts, and the key still does its normal job.
-- **On demand:** `/shards` (typed, or in a macro on a key) destroys every extra shard at once.
+- **Automatic:** when you have more shards than you want, **each key you press** out of combat destroys one extra
+  shard (the game allows one per key press), so a few steps with WASD clear them all. The key still does its normal
+  job.
+- **On demand:** `/shards` (typed, or in a macro on a key) destroys one extra shard each time.
 
 ## Safe by design
 
@@ -36,7 +37,7 @@ WoW: Forever only lets addons destroy items right after you press a key, so XNSh
 
 | | |
 |---|---|
-| `/shards` | destroy the extra shards now |
+| `/shards` | destroy an extra shard now |
 | `/shards keep 3` | keep a different number (0 or more) |
 | `/shards auto` | turn destroying on your next key press on or off |
 | `/shards reset` | try the automatic mode again if you turned it off |

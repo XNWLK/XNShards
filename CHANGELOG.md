@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3
+
+- Fixed: with several extra shards, the first key press destroyed one and then showed an "AddOn 'XNShards' tried to
+  call the protected function" error and turned the automatic mode off. Destroying straight from the bag is allowed
+  once per key press, so XNShards now destroys one extra shard per key press (and per `/shards`), and says so once
+  when they are all gone.
+
 ## v1.2
 
 - Fixed: with an action bar addon that takes over the bag and action bars, bags and bars

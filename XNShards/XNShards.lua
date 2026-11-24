@@ -16,7 +16,6 @@ local FIRST_BAG, LAST_BAG = 0, NUM_BAG_SLOTS or 4
 local DEFAULTS = {
 	keep = 2,
 	auto = true, -- destroy the extras on your next key press
-	onePerPress = false, -- set if the client allows only one delete per key press
 }
 
 local db
@@ -25,6 +24,7 @@ local extraShards = 0 -- shards above db.keep, counted when the bags change
 local busy = false
 local pending = {} -- [item GUID] = true: delete sent, waiting for the bags to update
 local refused = false -- the game blocked a delete (ADDON_ACTION_BLOCKED)
+local destroyedByKeys = 0 -- shards destroyed by key presses since the last chat line
 
 local function Print(message)
 	DEFAULT_CHAT_FRAME:AddMessage("|cff9482c9XNShards|r " .. message)
@@ -99,8 +99,9 @@ local function DeleteSlot(entry)
 	return "deleted"
 end
 
--- deletes extra shards, all of them or one when the client allows only one per key press;
--- returns how many were deleted, how many extras are left, and whether the client refused one
+-- deletes one extra shard: deleting straight from the bag is allowed once per key press, and a second
+-- try in the same press is blocked (ADDON_ACTION_BLOCKED); returns how many were deleted, how many extras
+-- are left, and whether the game refused it
 local function DestroyExtras()
 	if busy or InCombatLockdown() or not db then
 		return 0, 0, false
@@ -120,7 +121,7 @@ local function DestroyExtras()
 	-- from the back of the list, so the first shards (soul bags first) are the ones kept
 	for i = #slots, 1, -1 do
 		local entry = slots[i]
-		if extra <= 0 or (db.onePerPress and deleted >= 1) then
+		if extra <= 0 or deleted >= 1 then
 			break
 		end
 		if not entry.locked and entry.count <= extra then
@@ -131,9 +132,6 @@ local function DestroyExtras()
 				deleted = deleted + entry.count
 			elseif result == "blocked" then
 				blocked = true
-				if deleted > 0 and not db.onePerPress then
-					db.onePerPress = true -- the first went through, the next didn't
-				end
 				break
 			end
 		end
@@ -151,8 +149,8 @@ local function RunNow()
 	end
 	local deleted, left, blocked = DestroyExtras()
 	if deleted > 0 then
-		Print("destroyed " .. Plural(deleted) ..
-			(left > 0 and (", " .. left .. " more: press again") or (", keeping " .. db.keep)))
+		Print("destroyed " .. Plural(deleted) .. (left > 0 and (", " .. left .. " more: " ..
+			(db.auto and "they go with your next key presses" or "type /shards again")) or (", keeping " .. db.keep)))
 	elseif blocked then
 		Print("the game refused to destroy the shard")
 	elseif CountShards() <= db.keep then
@@ -171,7 +169,11 @@ keyWatcher:SetScript("OnKeyDown", function()
 	end
 	local deleted, left, blocked = DestroyExtras()
 	if deleted > 0 then
-		Print("destroyed " .. Plural(deleted) .. (left > 0 and "" or (", keeping " .. db.keep)))
+		destroyedByKeys = destroyedByKeys + deleted
+		if left <= 0 then
+			Print("destroyed " .. Plural(destroyedByKeys) .. ", keeping " .. db.keep)
+			destroyedByKeys = 0
+		end
 	end
 	UpdateWatcher()
 	if blocked then
@@ -197,6 +199,7 @@ frame:SetScript("OnEvent", function(_, event, ...)
 		XNShardsDB = XNShardsDB or {}
 		db = XNShardsDB
 		db.needsKeyPress = nil -- from version 1.0
+		db.onePerPress = nil -- from version 1.1
 		for key, value in pairs(DEFAULTS) do
 			if db[key] == nil then
 				db[key] = value
@@ -240,15 +243,15 @@ SlashCmdList.XNSHARDS = function(input)
 		UpdateWatcher()
 		Print("destroying on your next key press: " .. (db.auto and "on" or "off"))
 	elseif command == "reset" then
-		db.onePerPress = false
+		db.onePerPress = nil -- from version 1.1
 		db.auto = true
 		UpdateWatcher()
-		Print("trying several per press and the key press destroying again")
+		Print("destroying on your next key press: on again")
 	elseif command == "help" then
 		Print("/shards - destroy the extra shards now")
 		Print("/shards keep <number> - how many to keep (now " .. db.keep .. ")")
 		Print("/shards auto - destroy them on your next key press (now " .. (db.auto and "on" or "off") .. ")")
-		Print("/shards reset - try several per press and the key press destroying again")
+		Print("/shards reset - turn destroying on a key press back on after the game refused it")
 	else
 		RunNow()
 	end
