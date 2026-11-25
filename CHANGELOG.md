@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.4
+
+- Fixed: shards in a bag in the fifth bag slot (bag 5) weren't counted or destroyed.
+
 ## v1.3
 
 - Fixed: with several extra shards, the first key press destroyed one and then showed an "AddOn 'XNShards' tried to

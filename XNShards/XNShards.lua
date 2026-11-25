@@ -11,7 +11,8 @@
 -- leave those frames blocked for later clicks (seen with action bar addons that take them over).
 
 local SOUL_SHARD = 6265
-local FIRST_BAG, LAST_BAG = 0, NUM_BAG_SLOTS or 4
+-- the backpack, the 4 bag slots and the fifth slot after them (bag 5, where a soul bag can go too)
+local FIRST_BAG, LAST_BAG = 0, math.max(NUM_TOTAL_EQUIPPED_BAG_SLOTS or 0, NUM_BAG_SLOTS or 4, 5)
 
 local DEFAULTS = {
 	keep = 2,
