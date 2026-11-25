@@ -1,7 +1,8 @@
 # XNShards
 
 **Soul Shard cleanup** for World of Warcraft: Forever. XNShards keeps the number of Soul Shards you want (2 by
-default) and destroys the rest, so Drain Soul never fills your bags again.
+default) and destroys the rest, so Drain Soul never fills your bags again. Shards in a soul bag are never
+touched.
 
 **Download it on [CurseForge](https://www.curseforge.com/wow/addons/xnshards)** (or from the
 [Releases page](https://github.com/XNWLK/XNShards/releases) here).
@@ -31,14 +32,16 @@ WoW: Forever only lets addons destroy items right after you press a key, so XNSh
 - **Only Soul Shards:** XNShards checks that the bag slot really holds a Soul Shard before destroying it.
 - **Never your cursor:** shards are destroyed straight from the bag, so XNShards never picks anything up.
 - **Never in combat.**
-- **Soul bag first:** the shards you keep are the ones in your soul bag.
+- **Your soul bag is safe:** shards in a soul bag are never destroyed. The number you keep is for your other bags,
+  on top of a full soul bag (`/shards soulbag` makes it count the soul bag too).
 
 ## Commands
 
 | | |
 |---|---|
 | `/shards` | destroy an extra shard now |
-| `/shards keep 3` | keep a different number (0 or more) |
+| `/shards keep 3` | keep a different number outside your soul bag (0 or more) |
+| `/shards soulbag` | let the keep number count your soul bag too (off: the soul bag is never touched) |
 | `/shards auto` | turn destroying on your next key press on or off |
 | `/shards reset` | try the automatic mode again if you turned it off |
 | `/shards help` | list the commands |

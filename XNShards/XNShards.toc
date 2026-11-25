@@ -2,7 +2,7 @@
 ## Title: XNShards
 ## Notes: Destroys extra Soul Shards so you keep only the number you want (2 by default). /shards
 ## Author: Xn
-## Version: 1.4
+## Version: 1.5
 ## X-Website: https://www.curseforge.com/wow/addons/xnshards
 ## SavedVariables: XNShardsDB
 

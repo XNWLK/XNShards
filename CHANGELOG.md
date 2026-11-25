@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5
+
+- Shards in a soul bag are never destroyed now. The number you keep (2 by default) is for your other bags, on top of
+  a full soul bag. Since 1.4 counted the fifth bag slot, a soul bag there could be emptied down to 2.
+- `/shards soulbag` makes the keep number count the soul bag too (soul bag first), as before.
+
 ## v1.4
 
 - Fixed: shards in a bag in the fifth bag slot (bag 5) weren't counted or destroyed.

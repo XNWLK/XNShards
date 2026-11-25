@@ -1,6 +1,7 @@
 --[[ XNShards ]]--
 
--- Destroys Soul Shards beyond the number you want to keep (2 by default).
+-- Destroys Soul Shards beyond the number you want to keep (2 by default). Shards in a soul bag are
+-- never touched unless you ask for that (/shards soulbag): the keep number is for the other bags.
 --
 -- WoW: Forever only lets addons delete items right after a key press, so XNShards deletes during
 -- one: the next key you press out of combat (moving counts) destroys the extras, and /shards does
@@ -17,6 +18,7 @@ local FIRST_BAG, LAST_BAG = 0, math.max(NUM_TOTAL_EQUIPPED_BAG_SLOTS or 0, NUM_B
 local DEFAULTS = {
 	keep = 2,
 	auto = true, -- destroy the extras on your next key press
+	countSoulBags = false, -- false: shards in soul bags are always kept and don't count
 }
 
 local db
@@ -35,7 +37,8 @@ local function Plural(n)
 	return n .. " Soul Shard" .. (n == 1 and "" or "s")
 end
 
--- every bag slot holding a Soul Shard, soul bags first so the shards kept are the ones in them
+-- every bag slot holding a Soul Shard that XNShards may destroy: only the normal bags, unless
+-- countSoulBags is on (then soul bags first, so the shards kept are the ones in them)
 local function ShardSlots()
 	local soulBagSlots, otherSlots = {}, {}
 	for bag = FIRST_BAG, LAST_BAG do
@@ -48,6 +51,9 @@ local function ShardSlots()
 					locked = info and info.isLocked})
 			end
 		end
+	end
+	if not (db and db.countSoulBags) then
+		return otherSlots
 	end
 	for _, entry in ipairs(otherSlots) do
 		table.insert(soulBagSlots, entry)
@@ -155,7 +161,8 @@ local function RunNow()
 	elseif blocked then
 		Print("the game refused to destroy the shard")
 	elseif CountShards() <= db.keep then
-		Print("you have " .. Plural(CountShards()) .. ", nothing to destroy (keeping " .. db.keep .. ")")
+		Print("you have " .. Plural(CountShards()) .. (db.countSoulBags and "" or " outside your soul bag") ..
+			", nothing to destroy (keeping " .. db.keep .. ")")
 	else
 		Print("couldn't destroy any right now, try again in a moment")
 	end
@@ -239,6 +246,12 @@ SlashCmdList.XNSHARDS = function(input)
 		UpdateCount()
 		UpdateWatcher()
 		Print("keeping " .. Plural(db.keep))
+	elseif command == "soulbag" then
+		db.countSoulBags = not db.countSoulBags
+		UpdateCount()
+		UpdateWatcher()
+		Print(db.countSoulBags and ("shards in your soul bag count too now: XNShards keeps " .. Plural(db.keep) .. " in all, soul bag first")
+			or ("shards in your soul bag are never destroyed; XNShards keeps " .. Plural(db.keep) .. " in your other bags"))
 	elseif command == "auto" then
 		db.auto = not db.auto
 		UpdateWatcher()
@@ -252,6 +265,7 @@ SlashCmdList.XNSHARDS = function(input)
 		Print("/shards - destroy the extra shards now")
 		Print("/shards keep <number> - how many to keep (now " .. db.keep .. ")")
 		Print("/shards auto - destroy them on your next key press (now " .. (db.auto and "on" or "off") .. ")")
+		Print("/shards soulbag - let the keep number count your soul bag too (now " .. (db.countSoulBags and "on" or "off: soul bag never touched") .. ")")
 		Print("/shards reset - turn destroying on a key press back on after the game refused it")
 	else
 		RunNow()
